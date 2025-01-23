@@ -12,20 +12,20 @@ import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OrderProducer {
+public class OrderConfirmationProducer {
 
     private final KafkaTemplate<String, OrderConfirmation> kafkaTemplate;
 
-    public void sendOrderConfirmation(OrderConfirmation orderConfirmation) {
-         log.info("Sending order confirmation event: {}", orderConfirmation);
+    public void sendConfirmation(OrderConfirmation orderConfirmation) {
+         log.info("Sending order confirmation event: {}", orderConfirmation.toString());
 
         Message<OrderConfirmation> message = MessageBuilder
                 .withPayload(orderConfirmation)
-                .setHeader(TOPIC, "order.confirmation")
+                .setHeader(TOPIC, "order.confirmed")
                 .build();
 
         kafkaTemplate.send(message);
 
-        log.info("Order confirmation event sent to topic 'order.confirmation'");
+        log.info("Order confirmed event sent to topic 'order.confirmed'");
     }
 }

@@ -1,0 +1,23 @@
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+  application:
+    name: payment-service
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: paymentStatus:com.rajdip14.ecommerce.kafka.PaymentStatus
+
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: payment-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: paymentRequest:com.rajdip14.ecommerce.kafka.PaymentRequest
