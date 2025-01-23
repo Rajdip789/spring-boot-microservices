@@ -32,7 +32,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status;
+    private OrderStatusType status;
 
     @OneToMany(mappedBy = "order")
     private List<OrderLine> orderLines;

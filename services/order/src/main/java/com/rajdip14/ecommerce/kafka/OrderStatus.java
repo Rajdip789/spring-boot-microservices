@@ -1,15 +1,15 @@
 package com.rajdip14.ecommerce.kafka;
 
+import com.rajdip14.ecommerce.order.OrderStatusType;
 import com.rajdip14.ecommerce.order.PaymentMethod;
-import com.rajdip14.ecommerce.orderLine.OrderLine;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-public record OrderConfirmation (
+public record OrderStatus(
+        Integer orderId,
         String orderReference,
         BigDecimal totalAmount,
         PaymentMethod paymentMethod,
-        List<OrderLine> products
+        OrderStatusType status
 ) {
 }

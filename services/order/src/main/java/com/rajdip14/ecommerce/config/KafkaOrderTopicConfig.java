@@ -18,9 +18,9 @@ public class KafkaOrderTopicConfig {
     }
 
     @Bean
-    public NewTopic orderConfirmationTopic() {
+    public NewTopic orderStatusTopic() {
         return TopicBuilder
-                .name("order.confirmation")
+                .name("order.status")
                 .build();
     }
 }

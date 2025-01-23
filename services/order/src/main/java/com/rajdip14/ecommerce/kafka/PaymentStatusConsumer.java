@@ -3,11 +3,11 @@ package com.rajdip14.ecommerce.kafka;
 import com.rajdip14.ecommerce.exception.BusinessException;
 import com.rajdip14.ecommerce.order.Order;
 import com.rajdip14.ecommerce.order.OrderRepository;
-import com.rajdip14.ecommerce.order.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import com.rajdip14.ecommerce.order.OrderStatusType;
 
 import static java.lang.String.format;
 
@@ -16,7 +16,7 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class PaymentStatusConsumer {
 
-    private final OrderProducer orderProducer;
+    private final OrderStatusProducer orderStatusProducer;
     private final OrderRepository orderRepository;
 
     @KafkaListener(topics = "payment.status")
@@ -30,24 +30,23 @@ public class PaymentStatusConsumer {
                          format("Their is some issue, order not found with ID:: %s", paymentStatus.orderId())
                  ));
 
-         if(paymentStatus.status().equals("SUCCESS")) {
+        OrderStatusType newStatus = paymentStatus.status().equals("SUCCESS") ? OrderStatusType.CONFIRMED : OrderStatusType.FAILED;
+        order.setStatus(newStatus);
 
-             order.setStatus(OrderStatus.CONFIRMED);
+        log.info("Payment status processed: {}", newStatus);
 
-             orderProducer.sendOrderConfirmation(
-                     new OrderConfirmation(
-                             order.getReference(),
-                             order.getTotalAmount(),
-                             order.getPaymentMethod(),
-                             order.getOrderLines()
-                     )
-             );
+        orderStatusProducer.sendStatus(
+                new OrderStatus(
+                        order.getId(),
+                        order.getReference(),
+                        order.getTotalAmount(),
+                        order.getPaymentMethod(),
+                        newStatus
+                )
+        );
 
-         } else if(paymentStatus.status().equals("FAILED")) {
-             order.setStatus(OrderStatus.CANCELED);
-
-             //rollback product which have deducted - product-service
-         }
+        // Note: The rollback for failed payment should be implemented elsewhere,
+        // perhaps in a separate method or service to keep this method clean.
 
          orderRepository.save(order);
     }

@@ -1,9 +1,9 @@
 package com.rajdip14.ecommerce.order;
 
-public enum OrderStatus {
+public enum OrderStatusType {
     PENDING,
     CONFIRMED,
     SHIPPED,
     DELIVERED,
-    CANCELED
+    FAILED
 }
