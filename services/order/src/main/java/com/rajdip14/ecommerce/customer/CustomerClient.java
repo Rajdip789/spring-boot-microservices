@@ -22,7 +22,7 @@ public interface CustomerClient {
     Optional<CustomerResponse> findCustomerById(@PathVariable("customer-id") String customerId);
 
     default Optional<CustomerResponse> customerServiceFallback(String customerId, Throwable throwable) {
-        log.error("Customer service fallback triggered. Reason: {}", throwable.getMessage());
+        log.info("Customer service fallback triggered. Reason: {}", throwable.getMessage());
         throw new BusinessException("Customer service is currently unavailable. Please try again later.");
     }
 }

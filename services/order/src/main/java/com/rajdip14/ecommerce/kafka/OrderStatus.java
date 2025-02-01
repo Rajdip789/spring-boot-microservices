@@ -1,5 +1,6 @@
 package com.rajdip14.ecommerce.kafka;
 
+import com.rajdip14.ecommerce.customer.CustomerResponse;
 import com.rajdip14.ecommerce.order.OrderStatusType;
 import com.rajdip14.ecommerce.order.PaymentMethod;
 
@@ -10,6 +11,7 @@ public record OrderStatus(
         String orderReference,
         BigDecimal totalAmount,
         PaymentMethod paymentMethod,
-        OrderStatusType status
+        OrderStatusType status,
+        CustomerResponse customer
 ) {
 }

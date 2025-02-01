@@ -41,7 +41,8 @@ public class PaymentStatusConsumer {
                         order.getReference(),
                         order.getTotalAmount(),
                         order.getPaymentMethod(),
-                        newStatus
+                        newStatus,
+                        paymentStatus.customer()
                 )
         );
 
