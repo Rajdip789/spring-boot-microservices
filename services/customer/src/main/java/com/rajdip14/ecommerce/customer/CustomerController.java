@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -30,8 +30,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerResponse>> findAll() {
-        List<CustomerResponse> customerList = customerService.findAllCustomers();
+    public ResponseEntity<List<CustomerResponse>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "sort", defaultValue = "id") String sortKey,
+            @RequestParam(value = "order", defaultValue = "asc") String sortOrder
+    ) {
+        List<CustomerResponse> customerList = customerService.findAllCustomers(pageNumber, sortKey, sortOrder);
         return ResponseEntity.ok(customerList);
     }
 

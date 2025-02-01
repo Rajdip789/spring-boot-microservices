@@ -2,6 +2,8 @@ package com.rajdip14.ecommerce.customer;
 
 import com.rajdip14.ecommerce.exception.CustomerNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +42,15 @@ public class CustomerService {
         Optional.ofNullable(request.address()).ifPresent(customer::setAddress);
     }
 
-    public List<CustomerResponse> findAllCustomers() {
-        return customerRepository.findAll()
+    public List<CustomerResponse> findAllCustomers(Integer pageNumber, String sortKey, String sortOrder) {
+
+        pageNumber = pageNumber < 0 ? 0 : pageNumber;
+        sortKey = List.of("id", "firstname", "email").contains(sortKey) ? sortKey : "id"; // Allowed sort keys
+        sortOrder = sortOrder.equalsIgnoreCase("asc") || sortOrder.equalsIgnoreCase("desc") ? sortOrder.toLowerCase() : "asc";
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, 15, Sort.by(Sort.Direction.fromString(sortOrder), sortKey));
+
+        return customerRepository.findAll(pageRequest)
                 .stream()
                 .map(customerMapper::fromCustomer)
                 .collect(Collectors.toList());
@@ -60,6 +69,9 @@ public class CustomerService {
     }
 
     public void deleteCustomer(String customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new CustomerNotFoundException("Customer with ID " + customerId + " not found.");
+        }
         customerRepository.deleteById(customerId);
     }
 }
