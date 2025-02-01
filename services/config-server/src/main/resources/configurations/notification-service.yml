@@ -1,0 +1,36 @@
+server:
+  port: 8050
+spring:
+  data:
+    mongodb:
+      username: rajdip14
+      password: rajdip14
+      host: localhost
+      port: 27017
+      database: notification
+      authentication-database: admin
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: notification-service-Group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: orderStatus:com.rajdip14.ecommerce.kafka.order.OrderStatus, paymentStatus:com.rajdip14.ecommerce.kafka.payment.PaymentStatus
+  mail:
+    host: localhost
+    port: 1025
+    username: rajdip14
+    password: rajdip14
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
