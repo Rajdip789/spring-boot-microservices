@@ -45,9 +45,7 @@ public class PaymentRequestConsumer {
                         request.amount(),
                         request.paymentMethod(),
                         status,
-                        request.customer().firstname(),
-                        request.customer().lastname(),
-                        request.customer().email()
+                        request.customer()
                 )
         );
         log.info("Payment status event sent: {}", status);

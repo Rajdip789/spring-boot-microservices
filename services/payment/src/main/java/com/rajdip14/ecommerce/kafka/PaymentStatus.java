@@ -1,5 +1,6 @@
 package com.rajdip14.ecommerce.kafka;
 
+import com.rajdip14.ecommerce.customer.CustomerResponse;
 import com.rajdip14.ecommerce.payment.PaymentMethod;
 
 import java.math.BigDecimal;
@@ -10,8 +11,6 @@ public record PaymentStatus(
         BigDecimal amount,
         PaymentMethod paymentMethod,
         String status,
-        String customerFirstname,
-        String customerLastname,
-        String customerEmail
+        CustomerResponse customer
 ) {
 }
